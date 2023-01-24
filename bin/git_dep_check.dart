@@ -56,20 +56,50 @@ Map<String, GitDependencyReference> filterGitDependencies(
 }
 
 Future<void> checkPrs(GitDependencyReference dependency) async {
+  final messages = <TimestampedMessage>[];
+
   final latest = await pub.fetchLatestRelease(dependency.name);
-  print(dependency.name);
-  print(latest.version);
+  messages.add(
+    TimestampedMessage(
+      latest.published,
+      greenPen('Version ${latest.version} released'),
+    ),
+  );
+
   for (final url in dependency.prs) {
     final pr = await github.fetchPullRequest(url);
 
     if (pr.state == 'closed') {
       if (pr.merged == true) {
-        print(greenPen('PR ${pr.htmlUrl} is merged'));
+        messages.add(
+          TimestampedMessage(
+            pr.mergedAt!,
+            magentaPen('${pr.htmlUrl} was merged'),
+          ),
+        );
       } else {
-        print(redPen('PR ${pr.htmlUrl} is closed'));
+        messages.add(
+          TimestampedMessage(
+            pr.closedAt!,
+            redPen('${pr.htmlUrl} was closed'),
+          ),
+        );
       }
     } else {
-      print(yellowPen('PR ${pr.htmlUrl} is open'));
+      messages.add(
+        TimestampedMessage(
+          pr.createdAt!,
+          yellowPen('${pr.htmlUrl} was created'),
+        ),
+      );
     }
   }
+}
+
+// TODO: Convert to record with Dart 3
+class TimestampedMessage {
+  final DateTime timestamp;
+  final String message;
+
+  TimestampedMessage(this.timestamp, this.message);
 }
