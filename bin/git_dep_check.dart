@@ -2,22 +2,20 @@ import 'dart:io';
 
 import 'package:ansicolor/ansicolor.dart';
 import 'package:git_dep_check/git_dependency_reference.dart';
-import 'package:github/github.dart' hide GitReference;
-import 'package:pub_api_client/pub_api_client.dart';
+import 'package:git_dep_check/pub.dart';
 import 'package:yaml/yaml.dart';
+import 'package:git_dep_check/github.dart';
 
 final magentaPen = AnsiPen()..magenta();
 final greenPen = AnsiPen()..green();
 final yellowPen = AnsiPen()..yellow();
 final redPen = AnsiPen()..red();
 
-final pub = PubClient();
-final github = GitHub();
+final pub = PubRepo();
+final github = GitHubRepo();
 
-void main() async {
-  final pubspec = await loadYaml(
-      File('../safeguard_flutter/safeguard_live/pubspec.yaml')
-          .readAsStringSync());
+void main(List<String> arguments) async {
+  final pubspec = await loadYaml(File('pubspec.yaml').readAsStringSync());
   final gitDependencies = {
     ...filterGitDependencies('dependencies', pubspec['dependencies']),
     ...filterGitDependencies('dev_dependencies', pubspec['dev_dependencies']),
@@ -28,8 +26,10 @@ void main() async {
   }.values;
 
   for (final dependency in gitDependencies) {
-    // await checkPrs(pubspec, dependency);
+    await checkPrs(dependency);
   }
+
+  exit(0);
 }
 
 Map<String, GitDependencyReference> filterGitDependencies(
@@ -47,35 +47,29 @@ Map<String, GitDependencyReference> filterGitDependencies(
     if (value is! Map) continue;
 
     final prs = value['git']?['prs'] as List?;
-    if (prs == null) {
-      continue;
-    }
-    print(prs);
+    if (prs == null) continue;
+    gitDependencies[key] =
+        GitDependencyReference(location, key, prs.cast<String>());
   }
 
   return gitDependencies;
 }
 
-// Future<void> checkPrs(PubSpec pubspec, GitDependencyReference reference) async {
-//   final prUrls =
-//       pubspec.unParsedYaml![reference.location.yamlKey][reference.name]['prs'];
-//   if (prUrls == null) {
-//     print(yellowPen('No PRs listed for ${reference.name}'));
-//     return;
-//   }
+Future<void> checkPrs(GitDependencyReference dependency) async {
+  final latest = await pub.fetchLatestRelease(dependency.name);
+  print(dependency.name);
+  print(latest.version);
+  for (final url in dependency.prs) {
+    final pr = await github.fetchPullRequest(url);
 
-//   for (final prUrl in prUrls) {
-//     final parts = prUrl.split('/');
-//     final owner = parts[parts.length - 3];
-//     final name = parts[parts.length - 2];
-//     final number = parts.last;
-
-//     final pr =
-//         await github.pullRequests.get(RepositorySlug(owner, name), number);
-//     if (pr.state == 'closed') {
-//       print(redPen('PR $prUrl is closed'));
-//     } else {
-//       print(greenPen('PR $prUrl is open'));
-//     }
-//   }
-// }
+    if (pr.state == 'closed') {
+      if (pr.merged == true) {
+        print(greenPen('PR ${pr.htmlUrl} is merged'));
+      } else {
+        print(redPen('PR ${pr.htmlUrl} is closed'));
+      }
+    } else {
+      print(yellowPen('PR ${pr.htmlUrl} is open'));
+    }
+  }
+}
