@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:ansicolor/ansicolor.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:git_dep_check/git_dependency_reference.dart';
 import 'package:git_dep_check/pub.dart';
 import 'package:yaml/yaml.dart';
@@ -10,9 +12,12 @@ final magentaPen = AnsiPen()..magenta();
 final greenPen = AnsiPen()..green();
 final yellowPen = AnsiPen()..yellow();
 final redPen = AnsiPen()..red();
+final bluePen = AnsiPen()..blue();
 
 final pub = PubRepo();
 final github = GitHubRepo();
+
+final dateFormat = DateFormat('yyyy-MM-dd');
 
 void main(List<String> arguments) async {
   final pubspec = await loadYaml(File('pubspec.yaml').readAsStringSync());
@@ -24,6 +29,11 @@ void main(List<String> arguments) async {
       pubspec['dependency_overrides'],
     ),
   }.values;
+
+  if (gitDependencies.isEmpty) {
+    print(yellowPen('No git dependencies found'));
+    exit(0);
+  }
 
   for (final dependency in gitDependencies) {
     await checkPrs(dependency);
@@ -93,6 +103,20 @@ Future<void> checkPrs(GitDependencyReference dependency) async {
         ),
       );
     }
+  }
+
+  messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+  print(bluePen('${dependency.name} (${dependency.location})'));
+  for (final message in messages) {
+    final diff = DateTime.now().difference(message.timestamp);
+    final String time;
+    if (diff.inDays < 365) {
+      time = timeago.format(message.timestamp);
+    } else {
+      time = dateFormat.format(message.timestamp);
+    }
+    print('- $time: ${message.message}');
   }
 }
 

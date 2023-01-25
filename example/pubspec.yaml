@@ -10,5 +10,5 @@ dependencies:
   polar:
     git:
       prs:
-        - https://github.com/Rexios80/polar/14
+        - https://github.com/Rexios80/polar/pulls/14
       url: https://github.com/Rexios80/polar

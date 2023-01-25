@@ -10,7 +10,12 @@ dependencies:
   github: ^9.7.0
   pub_api_client: ^2.3.0
   yaml: ^3.1.1
+  timeago: ^3.3.0
+  intl: ^0.17.0
 
 dev_dependencies:
   rexios_lints: ^5.0.0
   test: ^1.21.0
+
+executables:
+  git_dep_check: git_dep_check
