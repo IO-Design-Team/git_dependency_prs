@@ -38,7 +38,7 @@ class CheckCommand extends Command {
 
     final lints = GdpLint.fromDependency(dependency);
     for (final lint in lints) {
-      print('- ${redPen(lint)})');
+      print('- ${redPen(lint)}');
     }
 
     final messages = <TimestampedMessage>[];

@@ -16,7 +16,7 @@ Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
     // If this is the last line, break
     if (lines.isEmpty) break;
 
-    if (line.trim().startsWith('# ignore: ')) {
+    if (line.trim().startsWith('# ignore:')) {
       final ignored = line
           .split(':')[1]
           .split(',')
