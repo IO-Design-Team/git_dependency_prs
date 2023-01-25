@@ -1,23 +1,12 @@
 import 'dart:io';
 
-import 'package:ansicolor/ansicolor.dart';
-import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:args/command_runner.dart';
+import 'package:git_dependency_prs/pens.dart';
 import 'package:git_dependency_prs/git_dependency_reference.dart';
-import 'package:git_dependency_prs/pub.dart';
 import 'package:yaml/yaml.dart';
-import 'package:git_dependency_prs/github.dart';
 
-final magentaPen = AnsiPen()..magenta();
-final greenPen = AnsiPen()..green();
-final yellowPen = AnsiPen()..yellow();
-final redPen = AnsiPen()..red();
-final bluePen = AnsiPen()..blue();
-
-final pub = PubRepo();
-final github = GitHubRepo();
-
-final dateFormat = DateFormat('yyyy-MM-dd');
+import 'command/check.dart';
+import 'command/lint.dart';
 
 void main(List<String> arguments) async {
   final pubspec = await loadYaml(File('pubspec.yaml').readAsStringSync());
@@ -35,9 +24,14 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  for (final dependency in gitDependencies) {
-    await checkPrs(dependency);
-  }
+  final runner = CommandRunner(
+    'git_dependency_prs',
+    'Check on the status git dependency PRs',
+  )
+    ..addCommand(CheckCommand(gitDependencies))
+    ..addCommand(LintCommand(gitDependencies));
+
+  await runner.run(arguments);
 
   exit(0);
 }
@@ -55,75 +49,30 @@ Map<String, GitDependencyReference> filterGitDependencies(
     final key = dependency.key;
     final value = dependency.value;
     if (value is! Map) continue;
+    final git = value['git'];
+    if (git == null) continue;
 
-    final prs = value['git']?['prs'] as List?;
-    if (prs == null) continue;
-    gitDependencies[key] =
-        GitDependencyReference(location, key, prs.cast<String>());
+    final List<String> prs;
+    final bool ignore;
+    final prsValue = git['prs'];
+    if (prsValue is String && prsValue == 'ignore') {
+      prs = [];
+      ignore = true;
+    } else if (prsValue is List) {
+      prs = prsValue.cast<String>();
+      ignore = false;
+    } else {
+      prs = [];
+      ignore = false;
+    }
+
+    gitDependencies[key] = GitDependencyReference(
+      location: location,
+      name: key,
+      prs: prs,
+      ignore: ignore,
+    );
   }
 
   return gitDependencies;
-}
-
-Future<void> checkPrs(GitDependencyReference dependency) async {
-  final messages = <TimestampedMessage>[];
-
-  final latest = await pub.fetchLatestRelease(dependency.name);
-  messages.add(
-    TimestampedMessage(
-      latest.published,
-      greenPen('Version ${latest.version} released'),
-    ),
-  );
-
-  for (final url in dependency.prs) {
-    final pr = await github.fetchPullRequest(url);
-
-    if (pr.state == 'closed') {
-      if (pr.merged == true) {
-        messages.add(
-          TimestampedMessage(
-            pr.mergedAt!,
-            magentaPen('${pr.htmlUrl} was merged'),
-          ),
-        );
-      } else {
-        messages.add(
-          TimestampedMessage(
-            pr.closedAt!,
-            redPen('${pr.htmlUrl} was closed'),
-          ),
-        );
-      }
-    } else {
-      messages.add(
-        TimestampedMessage(
-          pr.createdAt!,
-          yellowPen('${pr.htmlUrl} was created'),
-        ),
-      );
-    }
-  }
-
-  messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-
-  print(bluePen('${dependency.name} (${dependency.location})'));
-  for (final message in messages) {
-    final diff = DateTime.now().difference(message.timestamp);
-    final String time;
-    if (diff.inDays < 365) {
-      time = timeago.format(message.timestamp);
-    } else {
-      time = dateFormat.format(message.timestamp);
-    }
-    print('- $time: ${message.message}');
-  }
-}
-
-// TODO: Convert to record with Dart 3
-class TimestampedMessage {
-  final DateTime timestamp;
-  final String message;
-
-  TimestampedMessage(this.timestamp, this.message);
 }

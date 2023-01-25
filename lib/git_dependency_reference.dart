@@ -9,6 +9,14 @@ class GitDependencyReference {
   /// The git reference
   final List<String> prs;
 
+  /// Whether to ignore issues with this dependency
+  final bool ignore;
+
   /// Constructor
-  GitDependencyReference(this.location, this.name, this.prs);
+  GitDependencyReference({
+    required this.location,
+    required this.name,
+    required this.prs,
+    this.ignore = false,
+  });
 }
