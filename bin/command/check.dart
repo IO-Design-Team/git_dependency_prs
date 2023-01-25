@@ -1,6 +1,7 @@
 import 'package:args/command_runner.dart';
 import 'package:git_dependency_prs/git_dependency_reference.dart';
 import 'package:git_dependency_prs/github.dart';
+import 'package:git_dependency_prs/lint.dart';
 import 'package:git_dependency_prs/pens.dart';
 import 'package:git_dependency_prs/pub.dart';
 import 'package:git_dependency_prs/util.dart';
@@ -33,23 +34,11 @@ class CheckCommand extends Command {
   }
 
   Future<void> checkPrs(GitDependencyReference dependency) async {
-    void printLint(String code, String message) {
-      if (dependency.ignore.contains(code)) {
-        print('- ${yellowPen(message)} ($code)');
-      } else {
-        print('- ${redPen(message)} ($code)');
-      }
-    }
-
     print(bluePen('${dependency.name} (${dependency.location})'));
 
-    if (dependency.location != 'dependency_overrides') {
-      printLint('gdp_placement', 'Not in dependency_overrides');
-    }
-
-    if (dependency.prs.isEmpty) {
-      printLint('gdp_specify_prs', 'No PRs specified');
-      return;
+    final lints = GdpLint.fromDependency(dependency);
+    for (final lint in lints) {
+      print('- ${redPen(lint)})');
     }
 
     final messages = <TimestampedMessage>[];

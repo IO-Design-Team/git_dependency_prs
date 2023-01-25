@@ -1,3 +1,5 @@
+import 'package:git_dependency_prs/lint.dart';
+
 /// A reference to a git dependency
 class GitDependencyReference {
   /// The location of the dependency in the pubspec
@@ -10,7 +12,7 @@ class GitDependencyReference {
   final List<String> prs;
 
   /// Whether to ignore issues with this dependency
-  final List<String> ignore;
+  final List<GdpLint> ignore;
 
   /// Constructor
   GitDependencyReference({

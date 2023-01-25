@@ -2,13 +2,14 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:git_dependency_prs/git_dependency_reference.dart';
+import 'package:git_dependency_prs/lint.dart';
 import 'package:git_dependency_prs/pens.dart';
 import 'package:yaml/yaml.dart';
 
 /// Get all git dependencies from the local pubspec.yaml
 Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
   final rawPubspec = File('pubspec.yaml').readAsStringSync();
-  final ignores = <String, List<String>>{};
+  final ignores = <String, List<GdpLint>>{};
   final lines = Queue<String>.from(rawPubspec.split('\n'));
   while (lines.isNotEmpty) {
     final line = lines.removeFirst();
@@ -16,7 +17,13 @@ Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
     if (lines.isEmpty) break;
 
     if (line.trim().startsWith('# ignore: ')) {
-      final ignored = line.split(':')[1].split(', ');
+      final ignored = line
+          .split(':')[1]
+          .split(',')
+          .map((e) => e.trim())
+          .map(GdpLint.fromCode)
+          .whereType<GdpLint>()
+          .toList();
       final package = lines.removeFirst().trim().split(':').first;
       ignores[package] = ignored;
     }
@@ -49,7 +56,7 @@ Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
 Map<String, GitDependencyReference> _filterGitDependencies(
   String location,
   YamlMap? dependencies,
-  Map<String, List<String>> ignores,
+  Map<String, List<GdpLint>> ignores,
 ) {
   if (dependencies == null) {
     return {};

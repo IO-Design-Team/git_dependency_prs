@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:git_dependency_prs/git_dependency_reference.dart';
+import 'package:git_dependency_prs/lint.dart';
 import 'package:git_dependency_prs/pens.dart';
 import 'package:git_dependency_prs/util.dart';
 
@@ -18,23 +19,17 @@ class LintCommand extends Command {
   Future<void> run() async {
     final gitDependencies = await loadGitDependencies();
 
-    final issues = <GitDependencyReference, List<String>>{};
+    final issues = <GitDependencyReference, List<GdpLint>>{};
 
     for (final dependency in gitDependencies) {
-      if (!dependency.ignore.contains('gdp_placement') &&
-          dependency.location != 'dependency_overrides') {
-        issues[dependency] ??= [];
-        issues[dependency]!.add('Not in dependency_overrides');
-      }
-
-      if (!dependency.ignore.contains('gdp_specify_prs') &&dependency.prs.isEmpty) {
-        issues[dependency] ??= [];
-        issues[dependency]!.add('No PRs specified');
+      final lints = GdpLint.fromDependency(dependency);
+      if (lints.isNotEmpty) {
+        issues[dependency] = lints;
       }
     }
 
     for (final dependency in issues.keys) {
-      print(redPen('${dependency.name} (${dependency.location})'));
+      print(bluePen('${dependency.name} (${dependency.location})'));
       for (final issue in issues[dependency]!) {
         print('- ${redPen(issue)}');
       }
