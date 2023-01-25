@@ -33,18 +33,26 @@ class CheckCommand extends Command {
   }
 
   Future<void> checkPrs(GitDependencyReference dependency) async {
-    print(bluePen('${dependency.name} (${dependency.location})'));
-
-    if (dependency.ignoreLints) {
-      print('- ${yellowPen('Lints ignored')}');
+    void printLint(String code, String message) {
+      if (dependency.ignore.contains(code)) {
+        print('- ${yellowPen(message)} ($code)');
+      } else {
+        print('- ${redPen(message)} ($code)');
+      }
     }
 
+    print(bluePen('${dependency.name} (${dependency.location})'));
+
     if (dependency.location != 'dependency_overrides') {
-      print('- ${redPen('Not in dependency_overrides')}');
+      printLint('gdp_placement', 'Not in dependency_overrides');
+    }
+
+    if (dependency.prs.isEmpty) {
+      printLint('gdp_specify_prs', 'No PRs specified');
+      return;
     }
 
     final messages = <TimestampedMessage>[];
-
     final latest = await PubRepo.fetchLatestRelease(dependency.name);
 
     if (latest != null) {
@@ -56,11 +64,6 @@ class CheckCommand extends Command {
       );
     } else {
       print('- ${redPen('No releases found')}');
-    }
-
-    if (dependency.prs.isEmpty) {
-      print('- ${redPen('No PRs specified')}');
-      return;
     }
 
     for (final url in dependency.prs) {

@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:git_dependency_prs/git_dependency_reference.dart';
@@ -6,13 +7,34 @@ import 'package:yaml/yaml.dart';
 
 /// Get all git dependencies from the local pubspec.yaml
 Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
-  final pubspec = await loadYaml(File('pubspec.yaml').readAsStringSync());
+  final rawPubspec = File('pubspec.yaml').readAsStringSync();
+  final ignores = <String, List<String>>{};
+  final lines = Queue<String>.from(rawPubspec.split('\n'));
+  while (lines.isNotEmpty) {
+    final line = lines.removeFirst();
+    // If this is the last line, break
+    if (lines.isEmpty) break;
+
+    if (line.trim().startsWith('# ignore: ')) {
+      final ignored = line.split(':')[1].split(', ');
+      final package = lines.removeFirst().trim().split(':').first;
+      ignores[package] = ignored;
+    }
+  }
+
+  final pubspec = await loadYaml(rawPubspec);
+
   final gitDependencies = {
-    ..._filterGitDependencies('dependencies', pubspec['dependencies']),
-    ..._filterGitDependencies('dev_dependencies', pubspec['dev_dependencies']),
+    ..._filterGitDependencies('dependencies', pubspec['dependencies'], ignores),
+    ..._filterGitDependencies(
+      'dev_dependencies',
+      pubspec['dev_dependencies'],
+      ignores,
+    ),
     ..._filterGitDependencies(
       'dependency_overrides',
       pubspec['dependency_overrides'],
+      ignores,
     ),
   }.values;
 
@@ -27,6 +49,7 @@ Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
 Map<String, GitDependencyReference> _filterGitDependencies(
   String location,
   YamlMap? dependencies,
+  Map<String, List<String>> ignores,
 ) {
   if (dependencies == null) {
     return {};
@@ -41,13 +64,12 @@ Map<String, GitDependencyReference> _filterGitDependencies(
     if (git == null) continue;
 
     final prs = git['prs'] as List? ?? [];
-    final ignoreLints = git['ignore_lints'] as bool?;
 
     gitDependencies[key] = GitDependencyReference(
       location: location,
       name: key,
       prs: prs.cast<String>(),
-      ignoreLints: ignoreLints ?? false,
+      ignore: ignores[key] ?? [],
     );
   }
 

@@ -21,16 +21,13 @@ class LintCommand extends Command {
     final issues = <GitDependencyReference, List<String>>{};
 
     for (final dependency in gitDependencies) {
-      if (dependency.ignoreLints) {
-        continue;
-      }
-
-      if (dependency.location != 'dependency_overrides') {
+      if (!dependency.ignore.contains('gdp_placement') &&
+          dependency.location != 'dependency_overrides') {
         issues[dependency] ??= [];
         issues[dependency]!.add('Not in dependency_overrides');
       }
 
-      if (dependency.prs.isEmpty) {
+      if (!dependency.ignore.contains('gdp_specify_prs') &&dependency.prs.isEmpty) {
         issues[dependency] ??= [];
         issues[dependency]!.add('No PRs specified');
       }
