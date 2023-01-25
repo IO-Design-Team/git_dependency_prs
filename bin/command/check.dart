@@ -3,6 +3,7 @@ import 'package:git_dependency_prs/git_dependency_reference.dart';
 import 'package:git_dependency_prs/github.dart';
 import 'package:git_dependency_prs/pens.dart';
 import 'package:git_dependency_prs/pub.dart';
+import 'package:git_dependency_prs/util.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -15,21 +16,27 @@ class CheckCommand extends Command {
 
   final dateFormat = DateFormat('yyyy-MM-dd');
 
-  final Iterable<GitDependencyReference> gitDependencies;
+  CheckCommand() {
+    argParser.addOption('git-token', abbr: 't', help: 'GitHub API token');
+  }
 
-  CheckCommand(this.gitDependencies);
+  late final GitHubRepo github;
 
   @override
   Future<void> run() async {
+    github = GitHubRepo(gitToken: argResults?['git-token']);
+
+    final gitDependencies = await loadGitDependencies();
     for (final dependency in gitDependencies) {
       await checkPrs(dependency);
     }
   }
 
   Future<void> checkPrs(GitDependencyReference dependency) async {
-    final depSlug = '${dependency.name} (${dependency.location})';
+    print(bluePen('${dependency.name} (${dependency.location})'));
+
     if (dependency.ignore) {
-      print(yellowPen('$depSlug ignored'));
+      print('- ${yellowPen('ignored')}');
       return;
     }
 
@@ -54,7 +61,7 @@ class CheckCommand extends Command {
     }
 
     for (final url in dependency.prs) {
-      final pr = await GitHubRepo.fetchPullRequest(url);
+      final pr = await github.fetchPullRequest(url);
 
       if (pr.state == 'closed') {
         if (pr.merged == true) {
@@ -84,7 +91,6 @@ class CheckCommand extends Command {
 
     messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
-    print(bluePen(depSlug));
     for (final issue in issues) {
       print('- $issue');
     }

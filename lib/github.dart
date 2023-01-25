@@ -2,14 +2,16 @@ import 'package:github/github.dart';
 
 /// Access to github methods
 class GitHubRepo {
-  GitHubRepo._();
+  final GitHub _github;
 
-  static final _github = GitHub();
+  /// Constructor
+  GitHubRepo({String? gitToken})
+      : _github = GitHub(auth: Authentication.withToken(gitToken));
 
-  static final _pullRequestCache = <String, PullRequest>{};
+  final _pullRequestCache = <String, PullRequest>{};
 
   /// Fetch a PR by url
-  static Future<PullRequest> fetchPullRequest(String url) async {
+  Future<PullRequest> fetchPullRequest(String url) async {
     final cached = _pullRequestCache[url];
     if (cached != null) {
       return cached;

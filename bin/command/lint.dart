@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:git_dependency_prs/git_dependency_reference.dart';
 import 'package:git_dependency_prs/pens.dart';
+import 'package:git_dependency_prs/util.dart';
 
 class LintCommand extends Command {
   @override
@@ -11,12 +11,11 @@ class LintCommand extends Command {
   @override
   final String description = 'Error if any git dependencies specify no PRs';
 
-  final Iterable<GitDependencyReference> gitDependencies;
-
-  LintCommand(this.gitDependencies);
+  LintCommand();
 
   @override
   Future<void> run() async {
+    final gitDependencies = await loadGitDependencies();
     final issues = gitDependencies.where((e) => !e.ignore && e.prs.isEmpty);
     if (issues.isNotEmpty) {
       print(redPen('The following git dependencies specify no PRs:'));
