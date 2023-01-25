@@ -36,11 +36,13 @@ class CheckCommand extends Command {
     print(bluePen('${dependency.name} (${dependency.location})'));
 
     if (dependency.ignoreLints) {
-      print('- ${yellowPen('ignored')}');
-      return;
+      print('- ${yellowPen('Lints ignored')}');
     }
 
-    final issues = <String>[];
+    if (dependency.location != 'dependency_overrides') {
+      print('- ${redPen('Not in dependency_overrides')}');
+    }
+
     final messages = <TimestampedMessage>[];
 
     final latest = await PubRepo.fetchLatestRelease(dependency.name);
@@ -53,11 +55,12 @@ class CheckCommand extends Command {
         ),
       );
     } else {
-      issues.add(redPen('No releases found'));
+      print('- ${redPen('No releases found')}');
     }
 
     if (dependency.prs.isEmpty) {
-      issues.add(redPen('No PRs specified'));
+      print('- ${redPen('No PRs specified')}');
+      return;
     }
 
     for (final url in dependency.prs) {
@@ -91,9 +94,6 @@ class CheckCommand extends Command {
 
     messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
-    for (final issue in issues) {
-      print('- $issue');
-    }
     for (final message in messages) {
       final diff = DateTime.now().difference(message.timestamp);
       final String time;
