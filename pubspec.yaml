@@ -1,6 +1,7 @@
 name: git_dependency_prs
 description: Link PRs to git dependencies. Generate update timelines and enforce compliance.
 version: 0.1.0
+homepage: https://github.com/IO-Design-Team/git_dependency_prs
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
