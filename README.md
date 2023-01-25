@@ -44,11 +44,9 @@ package (dependency_overrides)
 
 ```console
 $ git_dependency_prs lint
-The following git dependencies specify no PRs:
-- package (dependencies)
-
-The following git dependencies are not in dependency_overrides:
-- package (dependencies)
+package (dependencies)
+- Not in dependency_overrides
+- No PRs specified
 ```
 
 This will exit with status code 1 for use in CI
