@@ -70,7 +70,13 @@ Map<String, GitDependencyReference> _filterGitDependencies(
     final git = value['git'];
     if (git == null) continue;
 
-    final prs = git['prs'] as List? ?? [];
+    final List<String> prs;
+    if (git is! Map) {
+      prs = [];
+    } else {
+      final list = git['prs'] as List? ?? [];
+      prs = list.cast<String>();
+    }
 
     gitDependencies[key] = GitDependencyReference(
       location: location,
