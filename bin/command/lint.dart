@@ -16,7 +16,8 @@ class LintCommand extends Command {
   @override
   Future<void> run() async {
     final gitDependencies = await loadGitDependencies();
-    final issues = gitDependencies.where((e) => !e.ignore && e.prs.isEmpty);
+    final issues =
+        gitDependencies.where((e) => !e.ignoreLints && e.prs.isEmpty);
     if (issues.isNotEmpty) {
       print(redPen('The following git dependencies specify no PRs:'));
       for (final issue in issues) {

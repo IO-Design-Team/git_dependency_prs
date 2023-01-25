@@ -10,13 +10,13 @@ class GitDependencyReference {
   final List<String> prs;
 
   /// Whether to ignore issues with this dependency
-  final bool ignore;
+  final bool ignoreLints;
 
   /// Constructor
   GitDependencyReference({
     required this.location,
     required this.name,
     required this.prs,
-    this.ignore = false,
+    this.ignoreLints = false,
   });
 }

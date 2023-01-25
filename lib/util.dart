@@ -40,25 +40,14 @@ Map<String, GitDependencyReference> _filterGitDependencies(
     final git = value['git'];
     if (git == null) continue;
 
-    final List<String> prs;
-    final bool ignore;
-    final prsValue = git['prs'];
-    if (prsValue is String && prsValue == 'ignore') {
-      prs = [];
-      ignore = true;
-    } else if (prsValue is List) {
-      prs = prsValue.cast<String>();
-      ignore = false;
-    } else {
-      prs = [];
-      ignore = false;
-    }
+    final prs = git['prs'] as List? ?? [];
+    final ignoreLints = git['ignore_lints'] as bool?;
 
     gitDependencies[key] = GitDependencyReference(
       location: location,
       name: key,
-      prs: prs,
-      ignore: ignore,
+      prs: prs.cast<String>(),
+      ignoreLints: ignoreLints ?? false,
     );
   }
 

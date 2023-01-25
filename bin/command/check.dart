@@ -35,7 +35,7 @@ class CheckCommand extends Command {
   Future<void> checkPrs(GitDependencyReference dependency) async {
     print(bluePen('${dependency.name} (${dependency.location})'));
 
-    if (dependency.ignore) {
+    if (dependency.ignoreLints) {
       print('- ${yellowPen('ignored')}');
       return;
     }
