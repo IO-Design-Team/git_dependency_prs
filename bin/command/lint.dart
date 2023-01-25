@@ -23,26 +23,6 @@ class LintCommand extends Command {
       for (final issue in noPrsIssues) {
         print(redPen('- ${issue.name} (${issue.location})'));
       }
-
-      print('''
-
-Link PRs to pubspec.yaml git dependencies to ensure they do not get lost:
-
-dependencies:
-  package_name:
-    git:
-      prs:
-        - https://github.com/owner/repo/pull/123
-      url: https://github.com/owner/repo
-
-Or ignore this issue if there are no relevant PRs available:
-
-dependencies:
-  package_name:
-    git:
-      ignore_lints: true
-      url: https://github.com/owner/repo
-''');
     }
 
     final placementIssues = gitDependencies.where(
@@ -60,15 +40,16 @@ dependencies:
       for (final issue in placementIssues) {
         print(redPen('- ${issue.name} (${issue.location})'));
       }
-
-      print(
-        '\nGit dependencies should be specified in dependency_overrides for cleanliness\n',
-      );
     }
 
     if (noPrsIssues.isEmpty && placementIssues.isEmpty) {
       print(greenPen('No issues found'));
     } else {
+      print(
+        redPen(
+          'See https://github.com/IO-Design-Team/git_dependency_prs#ignoring-lint-issues for help',
+        ),
+      );
       exit(1);
     }
   }
