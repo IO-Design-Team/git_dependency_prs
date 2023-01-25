@@ -23,6 +23,25 @@ class LintCommand extends Command {
       for (final issue in issues) {
         print('- ${redPen('${issue.name} (${issue.location})')}');
       }
+
+      print('''
+
+Link PRs to pubspec.yaml git dependencies to ensure they do not get lost:
+
+dependencies:
+  package_name:
+    git:
+      prs:
+        - https://github.com/owner/repo/pull/123
+      url: https://github.com/owner/repo
+
+Or ignore this issue if there are no relevant PRs available:
+
+dependencies:
+  package_name:
+    git:
+      prs: ignore
+      url: https://github.com/owner/repo''');
       exit(1);
     } else {
       print(greenPen('No issues found'));
