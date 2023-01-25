@@ -2,7 +2,7 @@ Link PRs to git dependencies. Generate update timelines and enforce compliance.
 
 ## About
 
-A lot of packages have forks with PRs that are not merged. This tool helps keep track of open PRs and display a timeline to help see if the changes may have been released so you can update your pubspec.
+A lot of packages have necessary PRs that are not merged. This tool helps keep track of open PRs and display a timeline to help see if the changes may have been released so you can update your pubspec.
 
 ## Installation
 
