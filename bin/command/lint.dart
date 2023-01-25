@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:git_dependency_prs/git_dependency_reference.dart';
 import 'package:git_dependency_prs/pens.dart';
 import 'package:git_dependency_prs/util.dart';
 
@@ -16,38 +17,38 @@ class LintCommand extends Command {
   @override
   Future<void> run() async {
     final gitDependencies = await loadGitDependencies();
-    final noPrsIssues =
-        gitDependencies.where((e) => !e.ignoreLints && e.prs.isEmpty);
-    if (noPrsIssues.isNotEmpty) {
-      print(redPen('The following git dependencies specify no PRs:'));
-      for (final issue in noPrsIssues) {
-        print(redPen('- ${issue.name} (${issue.location})'));
+
+    final issues = <GitDependencyReference, List<String>>{};
+
+    for (final dependency in gitDependencies) {
+      if (dependency.ignoreLints) {
+        continue;
+      }
+
+      if (dependency.location != 'dependency_overrides') {
+        issues[dependency] ??= [];
+        issues[dependency]!.add('Not in dependency_overrides');
+      }
+
+      if (dependency.prs.isEmpty) {
+        issues[dependency] ??= [];
+        issues[dependency]!.add('No PRs specified');
       }
     }
 
-    final placementIssues = gitDependencies.where(
-      (e) =>
-          !e.ignoreLints &&
-          ['dependencies', 'dev_dependencies'].contains(e.location),
-    );
-
-    if (placementIssues.isNotEmpty) {
-      print(
-        redPen(
-          'The following git dependencies are not in dependency_overrides:',
-        ),
-      );
-      for (final issue in placementIssues) {
-        print(redPen('- ${issue.name} (${issue.location})'));
+    for (final dependency in issues.keys) {
+      print(redPen('${dependency.name} (${dependency.location})'));
+      for (final issue in issues[dependency]!) {
+        print('- ${redPen(issue)}');
       }
     }
 
-    if (noPrsIssues.isEmpty && placementIssues.isEmpty) {
+    if (issues.isEmpty) {
       print(greenPen('No issues found'));
     } else {
       print(
         redPen(
-          'See https://github.com/IO-Design-Team/git_dependency_prs#ignoring-lint-issues for help',
+          '\nSee https://pub.dev/packages/git_dependency_prs#ignoring-lint-issues for help',
         ),
       );
       exit(1);
