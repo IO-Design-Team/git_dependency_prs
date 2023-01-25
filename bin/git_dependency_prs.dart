@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:ansicolor/ansicolor.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:git_dep_check/git_dependency_reference.dart';
-import 'package:git_dep_check/pub.dart';
+import 'package:git_dependency_prs/git_dependency_reference.dart';
+import 'package:git_dependency_prs/pub.dart';
 import 'package:yaml/yaml.dart';
-import 'package:git_dep_check/github.dart';
+import 'package:git_dependency_prs/github.dart';
 
 final magentaPen = AnsiPen()..magenta();
 final greenPen = AnsiPen()..green();
