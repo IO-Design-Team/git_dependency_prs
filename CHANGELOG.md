@@ -1,3 +1,6 @@
+## 0.2.1+1
+- Fixes readme
+
 ## 0.2.1
 - Adds update checking
 
