@@ -15,10 +15,12 @@ $ dart pub global activate git_dependency_prs
 ### Pubspec
 
 ```yaml
-dependencies:
-  # ignore: gdp_placement, gdp_no_prs
+dependency_overrides:
   package:
-    git: https://github.com/owner/name
+    git:
+      prs:
+        - https://github.com/owner/name/pulls/14
+      url: https://github.com/owner/name
 ```
 
 ### Print the update timeline
@@ -53,10 +55,9 @@ This will exit with status code 1 for use in CI
 
 ```yaml
 dependencies:
+  # ignore: gdp_placement, gdp_no_prs
   package:
-    git:
-      ignore_lint: true
-      url: ...
+    git: ...
 ```
 
 ## Troubleshooting
