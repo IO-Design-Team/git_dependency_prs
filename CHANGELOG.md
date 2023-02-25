@@ -1,3 +1,6 @@
+## 0.2.2
+- Upgrades intl to `0.18.0`
+
 ## 0.2.1+1
 - Fixes readme
 
