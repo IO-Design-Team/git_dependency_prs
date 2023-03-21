@@ -55,7 +55,7 @@ This will exit with status code 1 for use in CI
 
 ```yaml
 dependencies:
-  # ignore: gdp_placement, gdp_no_prs
+  # ignore: gdp_placement, gdp_specify_prs
   package:
     git: ...
 ```
