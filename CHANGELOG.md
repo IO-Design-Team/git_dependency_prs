@@ -1,3 +1,6 @@
+## 0.2.3
+- Dependency upgrades
+
 ## 0.2.2+1
 - Fixes readme
 
