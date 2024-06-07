@@ -17,14 +17,13 @@ void main(List<String> arguments) async {
     );
   }
 
-  final runner = CommandRunner(
+  final runner = CommandRunner<int>(
     'git_dependency_prs',
     'Check on the status git dependency PRs',
   )
     ..addCommand(CheckCommand())
     ..addCommand(LintCommand());
 
-  await runner.run(arguments);
-
-  exit(0);
+  final code = await runner.run(arguments);
+  exit(code ?? 1);
 }

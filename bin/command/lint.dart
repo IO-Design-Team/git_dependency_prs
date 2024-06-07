@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:git_dependency_prs/git_dependency_reference.dart';
 import 'package:git_dependency_prs/lint.dart';
 import 'package:git_dependency_prs/pens.dart';
 import 'package:git_dependency_prs/util.dart';
 
-class LintCommand extends Command {
+class LintCommand extends Command<int> {
   @override
   final String name = 'lint';
 
@@ -16,11 +14,11 @@ class LintCommand extends Command {
   LintCommand();
 
   @override
-  Future<void> run() async {
-    final gitDependencies = await loadGitDependencies();
+  int run() {
+    final gitDependencies = loadGitDependencies();
     if (gitDependencies.isEmpty) {
       print(yellowPen('No git dependencies found'));
-      exit(0);
+      return 0;
     }
 
     final issues = <GitDependencyReference, List<GdpLint>>{};
@@ -41,13 +39,14 @@ class LintCommand extends Command {
 
     if (issues.isEmpty) {
       print(greenPen('No issues found'));
+      return 0;
     } else {
       print(
         redPen(
           '\nSee https://pub.dev/packages/git_dependency_prs#ignoring-lint-issues for help',
         ),
       );
-      exit(1);
+      return 1;
     }
   }
 }

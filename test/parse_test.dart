@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('parse', () {
-    final dependencies = loadGitDependencies('test_resources/pubspec.yaml');
+    final dependencies = loadGitDependencies('test_resources/test.yaml');
     expect(dependencies.length, 4);
 
     var dependency = dependencies.elementAt(0);

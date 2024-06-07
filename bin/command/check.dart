@@ -8,7 +8,7 @@ import 'package:git_dependency_prs/util.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class CheckCommand extends Command {
+class CheckCommand extends Command<int> {
   @override
   final String name = 'check';
 
@@ -24,13 +24,20 @@ class CheckCommand extends Command {
   late final GitHubRepo github;
 
   @override
-  Future<void> run() async {
+  Future<int> run() async {
     github = GitHubRepo(gitToken: argResults?['git-token']);
 
-    final gitDependencies = await loadGitDependencies();
+    final gitDependencies = loadGitDependencies();
+    if (gitDependencies.isEmpty) {
+      print(yellowPen('No git dependencies found'));
+      return 0;
+    }
+
     for (final dependency in gitDependencies) {
       await checkPrs(dependency);
     }
+
+    return 0;
   }
 
   Future<void> checkPrs(GitDependencyReference dependency) async {
