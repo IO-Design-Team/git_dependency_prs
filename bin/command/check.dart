@@ -52,10 +52,13 @@ class CheckCommand extends Command<int> {
     final latest = await PubRepo.fetchLatestRelease(dependency.name);
 
     if (latest != null) {
+      final versionFragment = latest.version.replaceAll(RegExp(r'[^0-9]'), '');
+      final changelogUrl =
+          'https://pub.dev/packages/${dependency.name}/changelog#$versionFragment';
       messages.add(
         TimestampedMessage(
           latest.published,
-          greenPen('Version ${latest.version} released'),
+          greenPen('Version ${latest.version} released ($changelogUrl)'),
         ),
       );
     } else {

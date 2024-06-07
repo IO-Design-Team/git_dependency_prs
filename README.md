@@ -34,10 +34,10 @@ package (dependency_overrides)
 - 10 months ago: https://github.com/owner/repo/pull/511 was closed
 - 10 months ago: https://github.com/owner/repo/pull/521 was created
 - 10 months ago: https://github.com/owner/repo/pull/522 was created
-- 7 months ago: Version 2.2.0 released
+- 7 months ago: Version 2.2.0 released (https://pub.dev/packages/package/changelog#220)
 - 3 months ago: https://github.com/owner/repo/pull/610 was created
 package (dependency_overrides)
-- 27 days ago: Version 5.2.4 released
+- 27 days ago: Version 5.2.4 released (https://pub.dev/packages/package/changelog#524)
 - 7 hours ago: https://github.com/owner/repo/pull/10317 was created
 ```
 

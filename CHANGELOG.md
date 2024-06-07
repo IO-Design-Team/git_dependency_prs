@@ -1,3 +1,6 @@
+## 0.3.1
+- Displays changelog URL for package releases
+
 ## 0.3.0
 - Adds `gdp_specify_hash` to enforce specifying commit hashes
 
