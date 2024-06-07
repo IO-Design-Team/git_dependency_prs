@@ -99,7 +99,6 @@ class CheckCommand extends Command {
   }
 }
 
-// TODO: Convert to record with Dart 3
 class TimestampedMessage {
   final DateTime timestamp;
   final String message;

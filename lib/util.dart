@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:git_dependency_prs/git_dependency_reference.dart';
 import 'package:git_dependency_prs/lint.dart';
-import 'package:git_dependency_prs/pens.dart';
 import 'package:yaml/yaml.dart';
 
 /// Get all git dependencies from the local pubspec.yaml
@@ -45,11 +44,6 @@ Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
     ),
   }.values;
 
-  if (gitDependencies.isEmpty) {
-    print(yellowPen('No git dependencies found'));
-    exit(0);
-  }
-
   return gitDependencies;
 }
 
@@ -82,6 +76,7 @@ Map<String, GitDependencyReference> _filterGitDependencies(
       location: location,
       name: key,
       prs: prs.cast<String>(),
+      ref: git['ref'] as String?,
       ignore: ignores[key] ?? [],
     );
   }

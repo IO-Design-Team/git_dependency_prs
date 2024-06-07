@@ -8,10 +8,13 @@ class GitDependencyReference {
   /// THe package name
   final String name;
 
-  /// The git reference
+  /// The specified PRs
   final List<String> prs;
 
-  /// Whether to ignore issues with this dependency
+  /// The git ref
+  final String? ref;
+
+  /// Any ignored lints parsed from comments
   final List<GdpLint> ignore;
 
   /// Constructor
@@ -19,6 +22,7 @@ class GitDependencyReference {
     required this.location,
     required this.name,
     required this.prs,
+    required this.ref,
     required this.ignore,
   });
 }

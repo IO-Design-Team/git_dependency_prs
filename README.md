@@ -21,6 +21,7 @@ dependency_overrides:
       prs:
         - https://github.com/owner/name/pulls/14
       url: https://github.com/owner/name
+      ref: 616575ce3896f82ad942d6d11f9d0fdc25c0a8c5
 ```
 
 ### Print the update timeline
@@ -47,6 +48,7 @@ $ git_dependency_prs lint
 package (dependencies)
 - Not in dependency_overrides (gdp_placement)
 - No PRs specified (gdp_specify_prs)
+- Ref is missing or not a commit hash (gdp_specify_hash)
 ```
 
 This will exit with status code 1 for use in CI
@@ -55,7 +57,7 @@ This will exit with status code 1 for use in CI
 
 ```yaml
 dependencies:
-  # ignore: gdp_placement, gdp_specify_prs
+  # ignore: gdp_placement, gdp_specify_prs, gdp_specify_hash
   package:
     git: ...
 ```

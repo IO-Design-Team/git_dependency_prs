@@ -11,13 +11,17 @@ class LintCommand extends Command {
   final String name = 'lint';
 
   @override
-  final String description = 'Error if any git dependencies specify no PRs';
+  final String description = 'Error if any git dependencies have issues';
 
   LintCommand();
 
   @override
   Future<void> run() async {
     final gitDependencies = await loadGitDependencies();
+    if (gitDependencies.isEmpty) {
+      print(yellowPen('No git dependencies found'));
+      exit(0);
+    }
 
     final issues = <GitDependencyReference, List<GdpLint>>{};
 
