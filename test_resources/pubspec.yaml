@@ -1,0 +1,33 @@
+name: test
+
+dependencies:
+  package: ^1.0.0
+  # ignore: gdp_placement, gdp_specify_prs, gdp_specify_hash
+  package_git:
+    git:
+      prs:
+        - https://github.com/owner/repo/pulls/14
+      url: https://github.com/owner/repo
+      ref: 616575ce3896f82ad942d6d11f9d0fdc25c0a8c5
+  package_git_no_map:
+    git: https://github.com/owner/repo
+
+dev_dependencies:
+  package_dev: ^1.0.0
+  # ignore: gdp_placement, gdp_specify_prs, gdp_specify_hash
+  package_git_dev:
+    git:
+      prs:
+        - https://github.com/owner/repo/pulls/14
+      url: https://github.com/owner/repo
+      ref: 616575ce3896f82ad942d6d11f9d0fdc25c0a8c5
+
+dependency_overrides:
+  package_override: ^1.0.0
+  # ignore: gdp_placement, gdp_specify_prs, gdp_specify_hash
+  package_git_override:
+    git:
+      prs:
+        - https://github.com/owner/repo/pulls/14
+      url: https://github.com/owner/repo
+      ref: 616575ce3896f82ad942d6d11f9d0fdc25c0a8c5

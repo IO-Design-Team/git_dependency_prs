@@ -19,8 +19,8 @@ dependency_overrides:
   package:
     git:
       prs:
-        - https://github.com/owner/name/pulls/14
-      url: https://github.com/owner/name
+        - https://github.com/owner/repo/pulls/14
+      url: https://github.com/owner/repo
       ref: 616575ce3896f82ad942d6d11f9d0fdc25c0a8c5
 ```
 
@@ -29,16 +29,16 @@ dependency_overrides:
 ```console
 $ git_dependency_prs check
 package (dependency_overrides)
-- 11 months ago: https://github.com/owner/name/pull/503 was merged
-- 11 months ago: https://github.com/owner/name/pull/504 was merged
-- 10 months ago: https://github.com/owner/name/pull/511 was closed
-- 10 months ago: https://github.com/owner/name/pull/521 was created
-- 10 months ago: https://github.com/owner/name/pull/522 was created
+- 11 months ago: https://github.com/owner/repo/pull/503 was merged
+- 11 months ago: https://github.com/owner/repo/pull/504 was merged
+- 10 months ago: https://github.com/owner/repo/pull/511 was closed
+- 10 months ago: https://github.com/owner/repo/pull/521 was created
+- 10 months ago: https://github.com/owner/repo/pull/522 was created
 - 7 months ago: Version 2.2.0 released
-- 3 months ago: https://github.com/owner/name/pull/610 was created
+- 3 months ago: https://github.com/owner/repo/pull/610 was created
 package (dependency_overrides)
 - 27 days ago: Version 5.2.4 released
-- 7 hours ago: https://github.com/owner/name/pull/10317 was created
+- 7 hours ago: https://github.com/owner/repo/pull/10317 was created
 ```
 
 ### Lint

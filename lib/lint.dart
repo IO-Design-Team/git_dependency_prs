@@ -35,17 +35,20 @@ enum GdpLint {
     final lints = <GdpLint>[];
 
     final ignorePlacement = dependency.ignore.contains(GdpLint.placement);
-    if (!ignorePlacement && dependency.location != 'dependency_overrides') {
+    final correctPlacement = dependency.location == 'dependency_overrides';
+    if (!ignorePlacement && !correctPlacement) {
       lints.add(GdpLint.placement);
     }
 
     final ignoreSpecifyPrs = dependency.ignore.contains(GdpLint.specifyPrs);
-    if (!ignoreSpecifyPrs && dependency.prs.isEmpty) {
+    final hasPrs = dependency.prs.isNotEmpty;
+    if (!ignoreSpecifyPrs && !hasPrs) {
       lints.add(GdpLint.specifyPrs);
     }
 
     final ignoreSpecifyHash = dependency.ignore.contains(GdpLint.specifyHash);
-    if (!ignoreSpecifyHash && _commitHashRegex.hasMatch(dependency.ref ?? '')) {
+    final hasHash = _commitHashRegex.hasMatch(dependency.ref ?? '');
+    if (!ignoreSpecifyHash && !hasHash) {
       lints.add(GdpLint.specifyHash);
     }
 

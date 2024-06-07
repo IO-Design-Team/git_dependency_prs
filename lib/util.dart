@@ -6,8 +6,10 @@ import 'package:git_dependency_prs/lint.dart';
 import 'package:yaml/yaml.dart';
 
 /// Get all git dependencies from the local pubspec.yaml
-Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
-  final rawPubspec = File('pubspec.yaml').readAsStringSync();
+Iterable<GitDependencyReference> loadGitDependencies([
+  String location = 'pubspec.yaml',
+]) {
+  final rawPubspec = File(location).readAsStringSync();
   final ignores = <String, List<GdpLint>>{};
   final lines = Queue<String>.from(rawPubspec.split('\n'));
   while (lines.isNotEmpty) {
@@ -28,7 +30,7 @@ Future<Iterable<GitDependencyReference>> loadGitDependencies() async {
     }
   }
 
-  final pubspec = await loadYaml(rawPubspec);
+  final pubspec = loadYaml(rawPubspec);
 
   final gitDependencies = {
     ..._filterGitDependencies('dependencies', pubspec['dependencies'], ignores),
@@ -65,18 +67,21 @@ Map<String, GitDependencyReference> _filterGitDependencies(
     if (git == null) continue;
 
     final List<String> prs;
+    final String? ref;
     if (git is! Map) {
       prs = [];
+      ref = null;
     } else {
       final list = git['prs'] as List? ?? [];
       prs = list.cast<String>();
+      ref = git['ref'] as String?;
     }
 
     gitDependencies[key] = GitDependencyReference(
       location: location,
       name: key,
-      prs: prs.cast<String>(),
-      ref: git['ref'] as String?,
+      prs: prs,
+      ref: ref,
       ignore: ignores[key] ?? [],
     );
   }

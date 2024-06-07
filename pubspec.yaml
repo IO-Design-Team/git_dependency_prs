@@ -18,6 +18,7 @@ dependencies:
 
 dev_dependencies:
   rexios_lints: ^6.0.1
+  test: ^1.25.7
 
 executables:
   git_dependency_prs: git_dependency_prs
