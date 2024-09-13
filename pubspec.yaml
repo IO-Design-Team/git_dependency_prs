@@ -15,8 +15,12 @@ dependencies:
   intl: ^0.19.0
   args: ^2.3.2
   pub_update_checker: ^1.2.0
+  analyzer: ^6.8.0
+  analyzer_plugin: ^0.11.3
+  custom_lint_builder: ^0.6.7
 
 dev_dependencies:
+  custom_lint: ^0.6.7
   rexios_lints: ^6.0.1
   test: ^1.25.7
 

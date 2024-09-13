@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:git_dependency_prs/pens.dart';
+import 'package:git_dependency_prs/src/pens.dart';
 import 'package:pub_update_checker/pub_update_checker.dart';
 
 import 'command/check.dart';

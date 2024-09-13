@@ -1,4 +1,4 @@
-import 'package:git_dependency_prs/lint.dart';
+import 'package:git_dependency_prs/src/lint.dart';
 
 /// A reference to a git dependency
 class GitDependencyReference {

@@ -1,5 +1,5 @@
-import 'package:git_dependency_prs/lint.dart';
-import 'package:git_dependency_prs/util.dart';
+import 'package:git_dependency_prs/src/lint.dart';
+import 'package:git_dependency_prs/src/util.dart';
 import 'package:test/test.dart';
 
 void main() {

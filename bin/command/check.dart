@@ -1,10 +1,10 @@
 import 'package:args/command_runner.dart';
-import 'package:git_dependency_prs/git_dependency_reference.dart';
-import 'package:git_dependency_prs/github.dart';
-import 'package:git_dependency_prs/lint.dart';
-import 'package:git_dependency_prs/pens.dart';
-import 'package:git_dependency_prs/pub.dart';
-import 'package:git_dependency_prs/util.dart';
+import 'package:git_dependency_prs/src/git_dependency_reference.dart';
+import 'package:git_dependency_prs/src/github.dart';
+import 'package:git_dependency_prs/src/lint.dart';
+import 'package:git_dependency_prs/src/pens.dart';
+import 'package:git_dependency_prs/src/pub.dart';
+import 'package:git_dependency_prs/src/util.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 

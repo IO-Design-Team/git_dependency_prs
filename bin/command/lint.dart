@@ -1,8 +1,8 @@
 import 'package:args/command_runner.dart';
-import 'package:git_dependency_prs/git_dependency_reference.dart';
-import 'package:git_dependency_prs/lint.dart';
-import 'package:git_dependency_prs/pens.dart';
-import 'package:git_dependency_prs/util.dart';
+import 'package:git_dependency_prs/src/git_dependency_reference.dart';
+import 'package:git_dependency_prs/src/lint.dart';
+import 'package:git_dependency_prs/src/pens.dart';
+import 'package:git_dependency_prs/src/util.dart';
 
 class LintCommand extends Command<int> {
   @override

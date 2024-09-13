@@ -1,4 +1,4 @@
-import 'package:git_dependency_prs/git_dependency_reference.dart';
+import 'package:git_dependency_prs/src/git_dependency_reference.dart';
 
 /// GDP lint issues
 enum GdpLint {
