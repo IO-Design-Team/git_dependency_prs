@@ -4,7 +4,7 @@ version: 0.3.1
 homepage: https://github.com/IO-Design-Team/git_dependency_prs
 
 environment:
-  sdk: ">=2.18.0 <4.0.0"
+  sdk: ^3.0.0
 
 dependencies:
   ansicolor: ^2.0.1
@@ -20,8 +20,7 @@ dependencies:
   custom_lint_builder: ^0.6.7
 
 dev_dependencies:
-  custom_lint: ^0.6.7
-  rexios_lints: ^6.0.1
+  rexios_lints: ^8.1.0
   test: ^1.25.7
 
 executables:

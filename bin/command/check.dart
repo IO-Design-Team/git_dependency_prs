@@ -4,7 +4,7 @@ import 'package:git_dependency_prs/src/github.dart';
 import 'package:git_dependency_prs/src/lint.dart';
 import 'package:git_dependency_prs/src/pens.dart';
 import 'package:git_dependency_prs/src/pub.dart';
-import 'package:git_dependency_prs/src/util.dart';
+import 'package:git_dependency_prs/src/git_dependencies.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -27,7 +27,7 @@ class CheckCommand extends Command<int> {
   Future<int> run() async {
     github = GitHubRepo(gitToken: argResults?['git-token']);
 
-    final gitDependencies = loadGitDependencies();
+    final gitDependencies = GitDependencies.fromPubspec();
     if (gitDependencies.isEmpty) {
       print(yellowPen('No git dependencies found'));
       return 0;
@@ -97,6 +97,8 @@ class CheckCommand extends Command<int> {
     messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
     for (final message in messages) {
+      // This is for display only
+      // ignore: prefer_timestamps
       final diff = DateTime.now().difference(message.timestamp);
       final String time;
       if (diff.inDays < 365) {

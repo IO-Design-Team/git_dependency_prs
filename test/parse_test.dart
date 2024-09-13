@@ -1,10 +1,11 @@
 import 'package:git_dependency_prs/src/lint.dart';
-import 'package:git_dependency_prs/src/util.dart';
+import 'package:git_dependency_prs/src/git_dependencies.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('parse', () {
-    final dependencies = loadGitDependencies('test_resources/test.yaml');
+    final dependencies =
+        GitDependencies.fromPubspec('test_resources/test.yaml');
     expect(dependencies.length, 4);
 
     var dependency = dependencies.elementAt(0);

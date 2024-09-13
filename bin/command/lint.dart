@@ -2,7 +2,7 @@ import 'package:args/command_runner.dart';
 import 'package:git_dependency_prs/src/git_dependency_reference.dart';
 import 'package:git_dependency_prs/src/lint.dart';
 import 'package:git_dependency_prs/src/pens.dart';
-import 'package:git_dependency_prs/src/util.dart';
+import 'package:git_dependency_prs/src/git_dependencies.dart';
 
 class LintCommand extends Command<int> {
   @override
@@ -15,7 +15,7 @@ class LintCommand extends Command<int> {
 
   @override
   int run() {
-    final gitDependencies = loadGitDependencies();
+    final gitDependencies = GitDependencies.fromPubspec();
     if (gitDependencies.isEmpty) {
       print(yellowPen('No git dependencies found'));
       return 0;

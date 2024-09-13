@@ -1,32 +1,25 @@
+import 'package:custom_lint_builder/custom_lint_builder.dart';
 import 'package:git_dependency_prs/src/git_dependency_reference.dart';
 
 /// GDP lint issues
-enum GdpLint {
+abstract final class GdpLint {
   /// The dependency is not in dependency_overrides
-  placement(
-    code: 'gdp_placement',
-    message: 'Not in dependency_overrides',
-  ),
-
-  /// The dependency does not specify any PRs
-  specifyPrs(
-    code: 'gdp_specify_prs',
-    message: 'No PRs specified',
-  ),
-
-  /// The dependency does not specify a commit hash
-  specifyHash(
-    code: 'gdp_specify_hash',
-    message: 'Ref is missing or not a commit hash',
+  static const placement = LintCode(
+    name: 'gdp_placement',
+    problemMessage: 'Not in dependency_overrides',
   );
 
-  /// Lint code
-  final String code;
+  /// The dependency does not specify any PRs
+  static const specifyPrs = LintCode(
+    name: 'gdp_specify_prs',
+    problemMessage: 'No PRs specified',
+  );
 
-  /// Lint message
-  final String message;
-
-  const GdpLint({required this.code, required this.message});
+  /// The dependency does not specify a commit hash
+  static const specifyHash = LintCode(
+    name: 'gdp_specify_hash',
+    problemMessage: 'Ref is missing or not a commit hash',
+  );
 
   static final _commitHashRegex = RegExp(r'^[0-9a-f]{40}$');
 
@@ -34,7 +27,7 @@ enum GdpLint {
   static List<GdpLint> fromDependency(GitDependencyReference dependency) {
     final lints = <GdpLint>[];
 
-    final ignorePlacement = dependency.ignore.contains(GdpLint.placement);
+    final ignorePlacement = dependency.ignore.contains(placement);
     final correctPlacement = dependency.location == 'dependency_overrides';
     if (!ignorePlacement && !correctPlacement) {
       lints.add(GdpLint.placement);

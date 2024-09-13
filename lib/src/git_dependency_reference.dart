@@ -1,4 +1,4 @@
-import 'package:git_dependency_prs/src/lint.dart';
+import 'package:custom_lint_builder/custom_lint_builder.dart';
 
 /// A reference to a git dependency
 class GitDependencyReference {
@@ -15,7 +15,7 @@ class GitDependencyReference {
   final String? ref;
 
   /// Any ignored lints parsed from comments
-  final List<GdpLint> ignore;
+  final List<LintCode> ignore;
 
   /// Constructor
   GitDependencyReference({

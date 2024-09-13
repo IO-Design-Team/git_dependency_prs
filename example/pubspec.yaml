@@ -1,0 +1,10 @@
+name: git_dependency_prs_example
+publish_to: none
+
+environment:
+  sdk: ^3.0.0
+
+dev_dependencies:
+  git_dependency_prs:
+    path: ../
+  rexios_lints: ^8.1.0
