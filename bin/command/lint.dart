@@ -34,7 +34,7 @@ class LintCommand extends Command<int> {
     for (final dependency in issues.keys) {
       print(bluePen('${dependency.name} (${dependency.location})'));
       for (final issue in issues[dependency]!) {
-        print('- ${redPen(issue)}');
+        print('- ${redPen(issue.displayString)}');
       }
     }
 

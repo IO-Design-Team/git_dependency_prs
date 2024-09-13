@@ -57,3 +57,9 @@ abstract final class GdpLints {
   /// Get a lint from its code
   static LintCode? fromCode(String code) => _codeMap[code];
 }
+
+/// Extension on [LintCode]
+extension LintCodeExtension on LintCode {
+  /// Get the display string
+  String get displayString => '$problemMessage ($name)';
+}
