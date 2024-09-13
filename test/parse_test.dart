@@ -1,4 +1,4 @@
-import 'package:git_dependency_prs/src/lint.dart';
+import 'package:git_dependency_prs/src/lints.dart';
 import 'package:git_dependency_prs/src/git_dependencies.dart';
 import 'package:test/test.dart';
 
@@ -8,12 +8,18 @@ void main() {
         GitDependencies.fromPubspec('test_resources/test.yaml');
     expect(dependencies.length, 4);
 
+    final all = {
+      GdpLints.placement,
+      GdpLints.specifyPrs,
+      GdpLints.specifyHash,
+    };
+
     var dependency = dependencies.elementAt(0);
     expect(dependency.location, 'dependencies');
     expect(dependency.name, 'package_git');
     expect(dependency.prs, ['https://github.com/owner/repo/pulls/14']);
     expect(dependency.ref, '616575ce3896f82ad942d6d11f9d0fdc25c0a8c5');
-    expect(dependency.ignore, GdpLint.values);
+    expect(dependency.ignore, all);
 
     dependency = dependencies.elementAt(1);
     expect(dependency.location, 'dependencies');
@@ -27,13 +33,13 @@ void main() {
     expect(dependency.name, 'package_git_dev');
     expect(dependency.prs, ['https://github.com/owner/repo/pulls/14']);
     expect(dependency.ref, '616575ce3896f82ad942d6d11f9d0fdc25c0a8c5');
-    expect(dependency.ignore, GdpLint.values);
+    expect(dependency.ignore, all);
 
     dependency = dependencies.elementAt(3);
     expect(dependency.location, 'dependency_overrides');
     expect(dependency.name, 'package_git_override');
     expect(dependency.prs, ['https://github.com/owner/repo/pulls/14']);
     expect(dependency.ref, '616575ce3896f82ad942d6d11f9d0fdc25c0a8c5');
-    expect(dependency.ignore, GdpLint.values);
+    expect(dependency.ignore, all);
   });
 }

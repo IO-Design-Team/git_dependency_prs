@@ -1,7 +1,7 @@
 import 'package:args/command_runner.dart';
 import 'package:git_dependency_prs/src/git_dependency_reference.dart';
 import 'package:git_dependency_prs/src/github.dart';
-import 'package:git_dependency_prs/src/lint.dart';
+import 'package:git_dependency_prs/src/lints.dart';
 import 'package:git_dependency_prs/src/pens.dart';
 import 'package:git_dependency_prs/src/pub.dart';
 import 'package:git_dependency_prs/src/git_dependencies.dart';
@@ -43,7 +43,7 @@ class CheckCommand extends Command<int> {
   Future<void> checkPrs(GitDependencyReference dependency) async {
     print(bluePen('${dependency.name} (${dependency.location})'));
 
-    final lints = GdpLint.fromDependency(dependency);
+    final lints = GdpLints.fromDependency(dependency);
     for (final lint in lints) {
       print('- ${redPen(lint)}');
     }

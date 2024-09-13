@@ -1,6 +1,7 @@
 import 'package:args/command_runner.dart';
+import 'package:custom_lint_builder/custom_lint_builder.dart';
 import 'package:git_dependency_prs/src/git_dependency_reference.dart';
-import 'package:git_dependency_prs/src/lint.dart';
+import 'package:git_dependency_prs/src/lints.dart';
 import 'package:git_dependency_prs/src/pens.dart';
 import 'package:git_dependency_prs/src/git_dependencies.dart';
 
@@ -21,10 +22,10 @@ class LintCommand extends Command<int> {
       return 0;
     }
 
-    final issues = <GitDependencyReference, List<GdpLint>>{};
+    final issues = <GitDependencyReference, List<LintCode>>{};
 
     for (final dependency in gitDependencies) {
-      final lints = GdpLint.fromDependency(dependency);
+      final lints = GdpLints.fromDependency(dependency);
       if (lints.isNotEmpty) {
         issues[dependency] = lints;
       }

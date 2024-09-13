@@ -1,8 +1,7 @@
 import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 import 'package:git_dependency_prs/src/git_dependencies.dart';
-import 'package:git_dependency_prs/src/git_dependency_reference.dart';
-import 'package:git_dependency_prs/src/lint.dart';
+import 'package:git_dependency_prs/src/lints.dart';
 
 /// Create the linter plugin
 PluginBase createPlugin() => _GdpLinter();
@@ -31,14 +30,11 @@ class GdpLintRule extends LintRule {
     if (gitDependencies.isEmpty) return;
 
     for (final dependency in gitDependencies) {
-      final lints = GdpLint.fromDependency(dependency);
-      if (lints.isNotEmpty) {
-        for (final lint in lints) {
-          reporter.reportErrorForSpan(
-            LintCode(name: lint.toString(), problemMessage: lint.toString()),
-            resolver.source.span,
-          );
-        }
+      final lints = GdpLints.fromDependency(dependency);
+      if (lints.isEmpty) continue;
+
+      for (final lint in lints) {
+        reporter.reportErrorForSpan(lint, dependency.span);
       }
     }
   }
