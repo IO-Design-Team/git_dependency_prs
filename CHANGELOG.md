@@ -1,3 +1,6 @@
+## 0.3.2
+- Dependency upgrades
+
 ## 0.3.1
 - Displays changelog URL for package releases
 
