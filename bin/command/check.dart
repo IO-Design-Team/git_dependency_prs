@@ -6,7 +6,6 @@ import 'package:git_dependency_prs/pens.dart';
 import 'package:git_dependency_prs/pub.dart';
 import 'package:git_dependency_prs/util.dart';
 import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class CheckCommand extends Command<int> {
   @override
@@ -100,7 +99,7 @@ class CheckCommand extends Command<int> {
       final diff = DateTime.now().difference(message.timestamp);
       final String time;
       if (diff.inDays < 365) {
-        time = timeago.format(message.timestamp);
+        time = '${diff.inDays} days ago';
       } else {
         time = dateFormat.format(message.timestamp);
       }

@@ -1,6 +1,6 @@
 name: git_dependency_prs
 description: Link PRs to git dependencies. Generate update timelines and enforce compliance.
-version: 0.3.2
+version: 0.3.3
 homepage: https://github.com/IO-Design-Team/git_dependency_prs
 
 environment:
@@ -11,13 +11,12 @@ dependencies:
   github: ^9.7.0
   pub_api_client: ^3.0.0
   yaml: ^3.1.1
-  timeago: ^3.3.0
-  intl: ^0.19.0
+  intl: ^0.20.0
   args: ^2.3.2
   pub_update_checker: ^1.2.0
 
 dev_dependencies:
-  rexios_lints: ^8.2.0
+  rexios_lints: ^9.0.0
   test: ^1.25.7
 
 executables:
