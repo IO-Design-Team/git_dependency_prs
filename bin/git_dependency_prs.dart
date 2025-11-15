@@ -5,7 +5,6 @@ import 'package:git_dependency_prs/pens.dart';
 import 'package:pub_update_checker/pub_update_checker.dart';
 
 import 'command/check.dart';
-import 'command/lint.dart';
 
 void main(List<String> arguments) async {
   final newVersion = await PubUpdateChecker.check();
@@ -20,9 +19,7 @@ void main(List<String> arguments) async {
   final runner = CommandRunner<int>(
     'git_dependency_prs',
     'Check on the status git dependency PRs',
-  )
-    ..addCommand(CheckCommand())
-    ..addCommand(LintCommand());
+  )..addCommand(CheckCommand());
 
   final code = await runner.run(arguments);
   exit(code ?? 1);

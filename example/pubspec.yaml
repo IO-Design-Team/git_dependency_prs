@@ -1,0 +1,15 @@
+name: example
+publish_to: none
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  package_1:
+    git:
+      url: https://github.com/owner/repo
+      ref: 616575ce3896f82ad942d6d11f9d0fdc25c0a8c5
+
+git_dependency_prs:
+  package_1:
+    - https://github.com/owner/repo/pulls/14
