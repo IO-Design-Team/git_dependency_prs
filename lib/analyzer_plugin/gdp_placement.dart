@@ -31,13 +31,16 @@ class _Visitor extends PubspecVisitor<void> {
 
   @override
   void visitPackageDependency(PubspecDependency dependency) {
-    rule.reportAtPubNode(dependency.name!);
     enforceNotGitDependency(dependency);
   }
 
   @override
   void visitPackageDevDependency(PubspecDependency dependency) {
-    rule.reportAtPubNode(dependency.name!);
     enforceNotGitDependency(dependency);
+  }
+
+  @override
+  void visitPackageName(PubspecEntry name) {
+    rule.reportAtPubNode(name.value);
   }
 }

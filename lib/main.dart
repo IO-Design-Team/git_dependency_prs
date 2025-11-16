@@ -12,6 +12,6 @@ class GitDependencyPrsPlugin extends Plugin {
 
   @override
   void register(PluginRegistry registry) {
-    registry..registerWarningRule(GdpPlacement());
+    registry..registerLintRule(GdpPlacement());
   }
 }

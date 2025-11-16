@@ -21,6 +21,8 @@ dependencies:
 dev_dependencies:
   rexios_lints: ^17.0.0
   test: ^1.25.7
+  analyzer_testing: ^0.1.2
+  test_reflective_loader: ^0.4.0
 
 executables:
   git_dependency_prs: git_dependency_prs
