@@ -1,4 +1,5 @@
-import 'package:pub_api_client/pub_api_client.dart';
+import 'package:pub_api_client/pub_api_client.dart'
+    show PackageVersion, PubClient;
 
 /// Access to pub methods
 class PubRepo {
