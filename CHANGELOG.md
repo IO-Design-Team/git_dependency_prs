@@ -1,3 +1,7 @@
+## 0.3.4
+
+- Updates `pub_api_client` to `^4.0.0`
+
 ## 0.3.3
 
 - Removes dependency on `timeago`
